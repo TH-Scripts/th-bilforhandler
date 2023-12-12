@@ -18,8 +18,9 @@ ESX.RegisterServerCallback('th-bilforhandler:vehicleBuy', function(source, cb, v
     end
 end)
 
-ESX.RegisterServerCallback('th-advokat:getOnlinePlayers', function(source, cb, closePlayer)
-	local xPlayer = ESX.GetPlayerFromId(closePlayer)
+ESX.RegisterServerCallback('th-bilforhandler:getNearestPlayers', function(source, cb, closePlayer)
+    print(closePlayer)
+    local xPlayer = ESX.GetPlayerFromId(closePlayer)
 	local players = {}
 
     if xPlayer.get('firstName') then

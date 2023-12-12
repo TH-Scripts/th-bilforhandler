@@ -18,7 +18,7 @@ end)
 
 function getPlayers()
 	local closestplayer = ESX.Game.GetClosestPlayer()
-	local closePlayer = GetPlayerFromId(closestplayer)
+	local closePlayer = GetPlayerServerId(closestplayer)
 
 	ESX.TriggerServerCallback('th-bilforhandler:getNearestPlayers', function(players)
 		local elements = {}
@@ -38,12 +38,12 @@ function getPlayers()
 				})
 			end
 
-			lib.registerContet({
+			lib.registerContext({
 				id = 'sellveh_menu',
 				title = 'Sælg køretøj',
 				options = elements,
 			})
 			lib.showContext('sellveh_menu')
 		end
-	end)
+	end, closePlayer)
 end
