@@ -1,25 +1,11 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.4.32-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             12.6.0.6765
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE TABLE IF NOT EXISTS `th_lager` (
+  `model` varchar(50) DEFAULT NULL,
+  `nummerplade` varchar(50) NOT NULL DEFAULT 'intet',
+  `pris` int(11) DEFAULT NULL,
+  PRIMARY KEY (`nummerplade`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
--- Dumping database structure for esxlegacy_5e1d5e
-CREATE DATABASE IF NOT EXISTS `esxlegacy_5e1d5e` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */;
-USE `esxlegacy_5e1d5e`;
-
--- Dumping structure for table esxlegacy_5e1d5e.th_vehicles
 CREATE TABLE IF NOT EXISTS `th_vehicles` (
   `name` varchar(60) NOT NULL,
   `model` varchar(60) NOT NULL,
@@ -28,7 +14,6 @@ CREATE TABLE IF NOT EXISTS `th_vehicles` (
   PRIMARY KEY (`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table esxlegacy_5e1d5e.th_vehicles: ~214 rows (approximately)
 INSERT INTO `th_vehicles` (`name`, `model`, `price`, `category`) VALUES
 	('Adder', 'adder', 900000, 'super'),
 	('Alpha', 'alpha', 60000, 'sports'),
@@ -245,14 +230,12 @@ INSERT INTO `th_vehicles` (`name`, `model`, `price`, `category`) VALUES
 	('Zion Cabrio', 'zion2', 45000, 'coupes'),
 	('Z-Type', 'ztype', 220000, 'sportsclassics');
 
--- Dumping structure for table esxlegacy_5e1d5e.th_vehiclescategories
 CREATE TABLE IF NOT EXISTS `th_vehiclescategories` (
   `name` varchar(60) NOT NULL,
   `label` varchar(60) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Dumping data for table esxlegacy_5e1d5e.th_vehiclescategories: ~11 rows (approximately)
 INSERT INTO `th_vehiclescategories` (`name`, `label`) VALUES
 	('compacts', 'Compacts'),
 	('coupes', 'Coupés'),
@@ -265,9 +248,3 @@ INSERT INTO `th_vehiclescategories` (`name`, `label`) VALUES
 	('super', 'Super'),
 	('suvs', 'SUVs'),
 	('vans', 'Vans');
-
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
