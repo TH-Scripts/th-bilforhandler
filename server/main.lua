@@ -16,6 +16,11 @@ ESX.RegisterServerCallback('th-bilforhandler:vehicleBuy', function(source, cb, v
             break
         end
     end
+end)
 
+RegisterNetEvent('th-bilforhandler:sellVeh', function(playerId)
+    local license = GetPlayerIdentifierByType(playerId, 'license')
+    print(license)
 
+    
 end)
