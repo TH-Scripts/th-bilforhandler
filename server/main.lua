@@ -18,9 +18,25 @@ ESX.RegisterServerCallback('th-bilforhandler:vehicleBuy', function(source, cb, v
     end
 end)
 
+ESX.RegisterServerCallback('th-advokat:getOnlinePlayers', function(source, cb, closePlayer)
+	local xPlayer = ESX.GetPlayerFromId(closePlayer)
+	local players = {}
+
+    if xPlayer.get('firstName') then
+        table.insert(players, {
+            source = xPlayer.source,
+            identifier = xPlayer.identifier,
+            name = xPlayer.name,
+            firstname = xPlayer.get('firstName'),
+            lastname = xPlayer.get('lastName'),
+        })
+    end
+	cb(players)
+end)
+
 RegisterNetEvent('th-bilforhandler:sellVeh', function(playerId)
     local license = GetPlayerIdentifierByType(playerId, 'license')
     print(license)
 
-    
+
 end)
