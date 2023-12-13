@@ -1,22 +1,6 @@
-exports.ox_target:addSphereZone({
-    coords = Config.Job.Menu.targetCoords, 
-    radius = 1,
-    debug = drawZones,
-    options = {
-        {
-            icon = 'fa-solid fa-hashtag',
-            label = 'Job menu',
-            groups = Config.Job.Profession,
-            onSelect = function()
-                lib.showContext('main_menu')
-            end
-        },
-    }
-})
-
 lib.registerContext({
     id = 'main_menu',
-    title = 'Bilforhandler',
+    title = 'Bilforhandler menu',
     options = {
       {
         title = Config.Title
@@ -26,8 +10,29 @@ lib.registerContext({
         description = 'Vælg den nærmeste spiller',
         icon = 'user',
         onSelect = function()
+          local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer()
+          if closestPlayer == -1 or closestPlayerDistance > 3.0 then
+            notifyNoPlayers()
+          else
             getPlayers()
+          end
         end
-      }
+      },
+      {
+        title = 'Lager',
+        description = 'Lageret af nuværende biler',
+        icon = 'list',
+        onSelect = function()
+          getCars()
+        end
+      },
+      {
+        title = 'Køb biler',
+        description = 'Køb en bil fra lageret',
+        icon = 'clipboard',
+        onSelect = function()
+          lagerMenu()
+        end
+      },
     }
   })
