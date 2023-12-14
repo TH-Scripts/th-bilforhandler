@@ -1,20 +1,34 @@
 ESX = exports["es_extended"]:getSharedObject()
+TriggerEvent('esx_society:registerSociety', Config.Job.Profession, Config.Job.Profession, Config.Job.Society, Config.Job.Society, Config.Job.Society, {type = 'public'})
 
-RegisterNetEvent('th-bilforhandler:buyCarsToStock', function(model, price)
+
+ESX.RegisterServerCallback('th-bilforhandler:buyCarsToStock', function(source, cb, model, price)
     randomPlate = GenerateUniquePlate()
-
-    MySQL.insert('INSERT INTO th_lager (model, nummerplade, pris) VALUES (?, ?, ?)', {
-        model, randomPlate, price
-    })
-
+    TriggerEvent('esx_addonaccount:getSharedAccount', 'society_cardealer', function(account)
+        if account.money > price then
+            MySQL.insert('INSERT INTO th_lager (model, nummerplade, pris) VALUES (?, ?, ?)', {
+                model, randomPlate, price
+            })
+            account.removeMoney(price)
+            cb(true)
+        else
+            cb(false)
+        end
+    end)
 end)
 
-RegisterNetEvent('th-bilforhandler:sellVehicle', function(plate)
-    print(plate)
+RegisterNetEvent('th-bilforhandler:sellVehicle', function(plate, price)
     
     MySQL.Async.execute('DELETE FROM th_lager WHERE nummerplade = @nummerplade', {
         ['@nummerplade'] = plate
     })
+
+    local sellPrice = Config.SellVehicleProcent * price
+    local finalPrice = price - sellPrice 
+
+    TriggerEvent('esx_addonaccount:getSharedAccount', 'society_cardealer', function(account)
+        account.addMoney(finalPrice)
+    end)
 end)
 
 ESX.RegisterServerCallback('th-bilforhandler:fetchCars', function(source, cb)
@@ -52,11 +66,17 @@ ESX.RegisterServerCallback('th-bilforhandler:getNearestPlayers', function(source
 	cb(players)
 end)
 
-RegisterNetEvent('th-bilforhandler:sellVeh', function(playerId)
-    local license = GetPlayerIdentifierByType(playerId, 'license')
-    print(license)
+ESX.RegisterServerCallback('th-bilforhandler:sellVeh', function(source, cb, vehPrice, playerId, plate, model)
+    local xPlayer, xTarget = ESX.GetPlayerFromId(source), ESX.GetPlayerFromId(playerId)
 
+    playerMoney = xTarget.getAccount('bank')
 
+    if playerMoney.money >= vehPrice then
+        sellVehicle(xTarget.identifier, plate, xTarget, model)
+        cb(true)
+    else
+        cb(false)
+    end
 end)
 
 ESX.RegisterServerCallback('th-bilforhandler:isPlateTaken', function(source, cb, plate)
@@ -65,3 +85,12 @@ ESX.RegisterServerCallback('th-bilforhandler:isPlateTaken', function(source, cb,
 		cb(result ~= nil)
 	end)
 end)
+
+function sellVehicle(license, plate, xTarget)
+    print(license)
+    MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (?, ?, ?)', {
+        xTarget.identifier,
+        plate,
+        model
+    })
+end

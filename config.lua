@@ -3,13 +3,21 @@ Config = {}
 Config.Title = 'TH - Development'
 
 Config.Job = {
-    Profession = 'unemployed',
+    Profession = 'cardealer',
+    Society = 'society_cardealer',
+    MinSell = 2000, -- det minimale du kan sælge et køretøj for
+    MaxSell = 50000000, -- det maksimale du kan sælge et køretøj for
+    SellProcent = 0.20,
+    BossBuyCarsOnly = true, -- false = kun bossen kan købe biler ---- true = alle medarbejdere kan
 
     Menu = {
         targetCoords = vec3(-1253.7, -348.51, 36.91)
     }
 
+    
 }
+
+Config.SellVehicleProcent = 0.25
 
 -- danske nummerplader
 Config.DanskeNummerplader = true
@@ -50,5 +58,5 @@ Config.bilKategorier = {
 
 Config.demoSpawnPoints = {
     {coords = vector3(-1256.0411, -366.7564, 37.1699), heading = 81.1138, radius = 6.0},
-    --{coords = vector3(1998.5583, 3764.5159, 32.1808), heading = 240.7544, radius = 6.0}
+    {coords = vector3(-1269.8202, -363.8780, 37.1833), heading = 19.1248, radius = 6.0}
 }

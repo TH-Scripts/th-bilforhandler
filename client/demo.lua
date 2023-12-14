@@ -1,8 +1,8 @@
-function spawnCar(veh)
+function spawnCar(veh, plate)
     local spawnedCar = false
 
     for _, spawnPoint in ipairs(Config.demoSpawnPoints) do
-        local spawnCoords = spawnPoint.coords
+        spawnCoords = spawnPoint.coords
         local radius = spawnPoint.radius
         local isSpawnPointClear = ESX.Game.IsSpawnPointClear(spawnCoords, radius)
 
@@ -10,9 +10,11 @@ function spawnCar(veh)
             bil = veh
             ESX.Game.SpawnVehicle('' .. bil .. '', spawnCoords, spawnPoint.heading, function(vehicle)
                 notifyCarDemo(bil)
+                
+                if plate then
+                    SetVehicleNumberPlateText(vehicle, plate)
+                end
             end)
-            print(bil)
-            SetVehicleNumberPlateText(bil, 'DEMO')
             spawnedCar = true
             break
         end
@@ -23,12 +25,14 @@ function spawnCar(veh)
     end
 end
 
-function sellVehicle(nummerPlade)
-    print(nummerPlade)
+
+function sellVehicle(nummerPlade, price)
+    local sellPrice = Config.SellVehicleProcent * price
+    local finalPrice = price - sellPrice 
 
     local alert = lib.alertDialog({
-        header = 'Sælg',
-        content = 'Ønsker du at sælge køretøjet?',
+        header = 'Sælg '..nummerPlade,
+        content = 'Ønsker du at sælge køretøjet? \n\n Indkøbspris '..price..' DKK \n\n Salgspris '..ESX.Math.Round(finalPrice).. ' DKK',
         centered = true,
         cancel = true,
         labels = {
@@ -38,7 +42,8 @@ function sellVehicle(nummerPlade)
     })
 
     if alert == 'confirm' then
-        TriggerServerEvent('th-bilforhandler:sellVehicle', nummerPlade)
+        TriggerServerEvent('th-bilforhandler:sellVehicle', nummerPlade, price)
+        notifyVehicleSoldToFactory(nummerPlade, finalPrice)
     else
         notifyCanceled()
     end
@@ -55,12 +60,13 @@ function getCars()
         for _, v in pairs(data) do
             local bilModel = v.model
             local nummerPlade = v.nummerplade
+            local price = v.pris
             table.insert(carsStock, {
-                title = 'MODEL: ' .. v.model,
+                title = 'MODEL: ' ..v.model,
                 description = 'PRIS: ' .. v.pris.. '\n NUMMERPLADE: '..v.nummerplade,
                 icon = 'car-side',
                 onSelect = function()
-                    carChoose(bilModel, nummerPlade)
+                    carChoose(bilModel, nummerPlade, price)
                 end
             })
         end
@@ -79,7 +85,7 @@ function getCars()
   end)
 end
 
-function carChoose(bilModel, nummerPlade)
+function carChoose(bilModel, nummerPlade, price)
     lib.registerContext({
         id = 'køretøj_menu',
         title = 'Køretøj: '..bilModel,
@@ -93,14 +99,14 @@ function carChoose(bilModel, nummerPlade)
             icon = 'eye',
             
             onSelect = function()
-                spawnCar(bilModel)
+                spawnCar(bilModel, nummerPlade)
             end
           },
           {
             title = 'Sælg '..bilModel,
             icon = 'coins',
             onSelect = function()
-                sellVehicle(nummerPlade)
+                sellVehicle(nummerPlade, price)
             end
           },
         }

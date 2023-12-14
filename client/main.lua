@@ -11,6 +11,26 @@ Citizen.CreateThread(function()
 	ESX.PlayerData = ESX.GetPlayerData()
 end)
 
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+    checkBoss()
+end)
+
+isBoss = nil
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+    if job.name == Config.Job.Profession then
+        if job.grade_name == 'boss' then
+            isBoss = false
+        else
+            isBoss = true
+        end
+    end
+end)
+
+
+
 function fetchLagerCars(category)
     local elements = {}
     
@@ -70,18 +90,24 @@ end
 
 function buyVehicle(model, price, name)
     local alert = lib.alertDialog({
-        header = 'Køb bil',
+        header = 'Køb køretøj',
         content = 'KØRETØJ: \n'..name.. '\n\n PRIS: '..price,
         centered = true,
         cancel = true,
         labels = {
           cancel = 'Fortryd',
-          confirm = 'Køb bilen'
+          confirm = 'Køb køretøjet'
         }
     })
 
     if alert == 'confirm' then
-      TriggerServerEvent('th-bilforhandler:buyCarsToStock', model, price)
+      ESX.TriggerServerCallback('th-bilforhandler:buyCarsToStock', function(hasMoney)
+        if hasMoney then
+            notifyVehicleBought(name)
+        else
+            notifyNoVehicleBought()
+        end
+      end, model, price)
     else
       notifyCanceled()
     end
@@ -98,12 +124,14 @@ function getPlayers()
         for i=1, #players, 1 do
             if players[i].name ~= GetPlayerName(PlayerId()) then
                 local playerId = players[i].source
+                local firstName = players[i].firstname
+                local lastName = players[i].lastname
                 table.insert(elements, {
-                    title = 'Navn: ' .. players[i].firstname,
+                    title = 'Navn: ' .. players[i].firstname..' '..players[i].lastname,
                     description = 'Tryk her for at sælge vedkommende en bil',
-                    icon = 'hashtag',
+                    icon = 'user',
                     onSelect = function()
-                    print('name')
+                      sellMenu(playerId, firstName, lastName)
                   end
                 })
             end
@@ -113,6 +141,9 @@ function getPlayers()
         lib.registerContext({
             id = 'sellveh_menu',
             title = 'Sælg køretøj',
+            menu = 'main_menu',
+            onBack = function()
+            end,
             options = elements,
         })
         lib.showContext('sellveh_menu')
