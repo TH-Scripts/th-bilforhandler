@@ -149,3 +149,17 @@ function getPlayers()
         lib.showContext('sellveh_menu')
     end, closePlayer)
 end
+
+CreateThread(function()
+	local blip = AddBlipForCoord(Config.Blip.coords) -- ændrer disse koordinater
+
+	SetBlipSprite (blip, Config.Blip.sprite)
+	SetBlipDisplay(blip, Config.Blip.display)
+  SetBlipColour(blip, Config.Blip.color)
+	SetBlipScale  (blip, Config.Blip.scale)
+	SetBlipAsShortRange(blip, Config.Blip.shortrange)
+
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentSubstringPlayerName(Config.Blip.bliptext)
+	EndTextCommandSetBlipName(blip)
+end)   

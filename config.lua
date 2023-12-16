@@ -59,6 +59,16 @@ Config.bilKategorier = {
     -- },
 }
 
+Config.Blip = {
+    coords = vec3(-1251.2906, -361.2316, 36.9076),
+    sprite = 225,
+    color = 0,
+    scale = 1.0,
+    display = 4,
+    shortrange = true,
+    bliptext = 'Bilforhandler'
+}
+
 -- demo bilers spawn plads, tilpas radiusen 
 Config.demoSpawnPoints = {
     {coords = vector3(-1256.0411, -366.7564, 37.1699), heading = 81.1138, radius = 6.0},

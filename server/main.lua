@@ -91,14 +91,12 @@ RegisterNetEvent('th-bilforhandler:removePlayerMoney', function(playerId, vehicl
     local moneyToSeller = vehiclePrice * sellProcent
     local moneyToCompany = vehiclePrice - moneyToSeller
     moneyToSeller = ESX.Math.Round(moneyToSeller)
-    print('money to seller '..moneyToSeller)
 
     xPlayer.addAccountMoney('bank', moneyToSeller)
     xTarget.removeAccountMoney('bank', vehiclePrice)
 
     TriggerEvent('esx_addonaccount:getSharedAccount', Config.Job.Society, function(account)
         account.addMoney(moneyToCompany)
-        print('money to company '..moneyToCompany)
     end)
     TriggerClientEvent('th-bilforhandler:sellerCommission', seller, model, firstName, lastName, moneyToSeller)
 end)
