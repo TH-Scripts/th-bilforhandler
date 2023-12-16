@@ -5,6 +5,15 @@ CREATE TABLE IF NOT EXISTS `th_lager` (
   PRIMARY KEY (`nummerplade`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE IF NOT EXISTS `th_sold` (
+  `id` int(11) NOT NULL DEFAULT 0,
+  `bil` varchar(100) DEFAULT NULL,
+  `medarbejder` varchar(100) DEFAULT NULL,
+  `buyer` varchar(100) DEFAULT NULL,
+  `pris` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 CREATE TABLE IF NOT EXISTS `th_vehicles` (
   `name` varchar(60) NOT NULL,

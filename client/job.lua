@@ -30,12 +30,43 @@ function mainMenu()
             end
         },
         {
+            title = 'Bossmenu',
+            description = 'Åben bossmenuen',
+            icon = 'star',
+            disabled = isBoss,
+            onSelect = function()
+                bossMenu()
+            end
+        },
+        }
+    })
+    lib.showContext('main_menu')
+end
+
+function bossMenu()
+    lib.registerContext({
+        id = 'boss_menu',
+        title = 'Boss menu',
+        menu = 'main_menu',
+        onBack = function()
+        end,
+        options = {
+        {
             title = 'Køb biler',
             description = 'Køb en bil fra lageret',
             icon = 'clipboard',
             disabled = isBoss,
             onSelect = function()
                 lagerMenu()
+            end
+        },
+        {
+            title = 'Database',
+            description = 'Liste over solgte køretøjer',
+            icon = 'database',
+            disabled = isBoss,
+            onSelect = function()
+                dataBase()
             end
         },
         {
@@ -51,5 +82,5 @@ function mainMenu()
         },
         }
     })
-    lib.showContext('main_menu')
-end
+    lib.showContext('boss_menu')
+end 

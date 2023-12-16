@@ -1,3 +1,5 @@
+sold = nil
+
 function sellMenu(playerId, firstName, lastName)
     lib.registerContext({
         id = 'sell_menu',
@@ -25,7 +27,7 @@ function sellMenu(playerId, firstName, lastName)
       lib.showContext('sell_menu')
 end
 
-function chosseTheCar(playerId, firstName, lastName)
+function chosseTheCar(playerId, firstName, lastName, seller)
     ESX.TriggerServerCallback('th-bilforhandler:fetchCars', function(data) 
         carsStock = {}
   
@@ -41,7 +43,7 @@ function chosseTheCar(playerId, firstName, lastName)
                   description = 'PRIS: ' .. v.pris.. '\n NUMMERPLADE: '..v.nummerplade,
                   icon = 'car-side',
                   onSelect = function()
-                      sellVehicleToPlayer(bilModel, nummerPlade, firstName, lastName, playerId)
+                      sellVehicleToPlayer(bilModel, nummerPlade, firstName, lastName, playerId, price, seller)
                   end
               })
           end
@@ -60,7 +62,7 @@ function chosseTheCar(playerId, firstName, lastName)
     end)
 end
 
-function sellVehicleToPlayer(model, plate, firstName, lastName, playerId)
+function sellVehicleToPlayer(model, plate, firstName, lastName, playerId, price, seller)
     local input = lib.inputDialog('Sælg køretøjet '..plate, {
         {type = 'number', label = 'Indsæt salgspris', description = 'For meget skal personen betale for sin '..model, icon = 'user', min = Config.Job.MinSell, max = Config.Job.MaxSell},
       })
@@ -81,10 +83,52 @@ function sellVehicleToPlayer(model, plate, firstName, lastName, playerId)
     if alert == 'confirm' then
         ESX.TriggerServerCallback('th-bilforhandler:sellVeh', function(hasMoney)
             if hasMoney then
-                print('yes')
+--                TriggerServerEvent('th-bilforhandler:removePlayerMoney', playerId, price)
+                TriggerServerEvent('th-bilforhandler:targetId', model, plate, firstName, lastName, playerId, vehiclePrice, seller)
+            else
+                notifyPlayerHasNoMoney(firstName, lastName)
             end
         end, vehiclePrice, playerId, plate, model)
     else
         notifyCanceled()
     end
 end
+
+function spawnVehicle(veh, plate, playerId, vehiclePrice)
+    ESX.Game.SpawnVehicle(veh, Config.SpawnPoint.coords, Config.SpawnPoint.heading, function(veh)
+        SetVehicleNumberPlateText(veh, plate)
+        local props = ESX.Game.GetVehicleProperties(veh)
+        TriggerServerEvent('th-bilforhandler:giveVehToPlayer', plate, playerId, props)
+    end)
+end
+
+RegisterNetEvent('th-bilforhandler:targetIdClient', function(model, plate, firstName, lastName, playerId, vehiclePrice, seller)
+    local alert = lib.alertDialog({
+        header = 'Bekræft købet '..firstName.. ' '..lastName,
+        content = 'Bekræft købet af '..model.. ' med nummerpladen '..plate..'. \n\n Prisen er '..vehiclePrice.. ' DKK \n\n Ønsker du at købe køretøjet?',
+        centered = true,
+        cancel = true,
+        labels = {
+            confirm = 'Bekræft køb',
+            cancel = 'Afbryd køb'
+        }
+    })
+
+    if alert == 'confirm' then
+        spawnVehicle(model, plate, playerId, vehiclePrice)
+        notifyPlayerBoughtVehicle(model, plate)
+        TriggerServerEvent('th-bilforhandler:addDataToDatabase', playerId, model, vehiclePrice, seller)
+        TriggerServerEvent('th-bilforhandler:removePlayerMoney', playerId, vehiclePrice, firstName ,lastName, model, seller)
+    else
+        notifyCanceled()
+    end
+
+end)
+
+RegisterNetEvent('th-bilforhandler:sellerCommission', function(model, firstName, lastName, moneyToSeller)
+    notifyPlayerHasMoney(model, firstName, lastName, moneyToSeller)
+end)
+
+RegisterNetEvent('th-bilforhandler:soldVehicle', function(firstName ,lastName, model)
+    notifyPlayerHasMoney(firstName ,lastName, model)
+end)

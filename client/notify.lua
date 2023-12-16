@@ -97,13 +97,59 @@ function notifyVehicleSoldToFactory(plate, finalPrice)
     })
 end
 
-function notifyPlayerHasNoMoney()
+function notifyPlayerHasNoMoney(firstName ,lastName)
     lib.notify({
         id = 'biler9',
-        title = 'Har ikke nok penge',
+        title = firstName.. ' '..lastName..' \n\n har ikke nok penge',
         position = 'right-top',
         style = Config.Notify.Style,
         icon = 'money-bill',
+        iconColor = '#C53030'
+    })
+end
+
+function notifyPlayerHasMoney(model, firstName, lastName, moneyToSeller)
+    lib.notify({
+        id = 'biler9',
+        title = 'Du har fået '..moneyToSeller..' i provision for salget af '..model.. ' til '..firstName..' '..lastName,
+        position = 'right-top',
+        style = Config.Notify.Style,
+        icon = 'circle-check',
         iconColor = '#0afc12'
     })
 end
+
+function notifyPlayerBoughtVehicle(model, plate)
+    lib.notify({
+        id = 'biler9',
+        title = 'Du har købt bil modellen: ' ..model.. ' med nummerpladen '..plate,
+        position = 'right-top',
+        style = Config.Notify.Style,
+        icon = 'circle-check',
+        iconColor = '#0afc12'
+    })
+end
+
+function notifyNoDatabase()
+    lib.notify({
+        id = 'biler11',
+        title = 'Intet data',
+        position = 'right-top',
+        style = Config.Notify.Style,
+        icon = 'database',
+        iconColor = '#C53030'
+    })
+end
+
+function notifyRemovedDatabaseId()
+    lib.notify({
+        id = 'biler10',
+        title = 'Fjernet en kolonne',
+        position = 'right-top',
+        style = Config.Notify.Style,
+        icon = 'database',
+        iconColor = '#C53030'
+    })
+end
+
+

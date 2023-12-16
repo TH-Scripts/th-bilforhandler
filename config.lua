@@ -8,13 +8,11 @@ Config.Job = {
     MinSell = 2000, -- det minimale du kan sælge et køretøj for
     MaxSell = 50000000, -- det maksimale du kan sælge et køretøj for
     SellProcent = 0.20,
-    BossBuyCarsOnly = true, -- false = kun bossen kan købe biler ---- true = alle medarbejdere kan
 
     Menu = {
         targetCoords = vec3(-1253.7, -348.51, 36.91)
     }
 
-    
 }
 
 Config.SellVehicleProcent = 0.25
@@ -22,6 +20,7 @@ Config.SellVehicleProcent = 0.25
 -- danske nummerplader
 Config.DanskeNummerplader = true
 
+-- Notify styles
 Config.Notify = {
     Style = {
         backgroundColor = '#141517',
@@ -36,7 +35,7 @@ Config.bilKategorier = {
     ['sedans'] = {
         title = 'Sedans',
         description = 'Kategori for sedan biler',
-        icon = 'car'
+        icon = 'car' -- billederne findes på hjemmesiden "fontawesome.com"
     },
     ['super'] = {
         title = 'Super',
@@ -53,10 +52,22 @@ Config.bilKategorier = {
         description = 'Kategori for Off Road biler',
         icon = 'truck-monster'
     },
+    -- ['custom'] = {
+    --     title = 'Custom',
+    --     description = 'Kategori for custom biler',
+    --     icon = 'diamond' 
+    -- },
 }
 
-
+-- demo bilers spawn plads, tilpas radiusen 
 Config.demoSpawnPoints = {
     {coords = vector3(-1256.0411, -366.7564, 37.1699), heading = 81.1138, radius = 6.0},
     {coords = vector3(-1269.8202, -363.8780, 37.1833), heading = 19.1248, radius = 6.0}
 }
+
+
+-- hvor bilen spawner efter man har købt den
+Config.SpawnPoint = {
+    coords = vec3(-1234.9867, -344.0579, 37.3329),
+    heading = 25.0684
+} 

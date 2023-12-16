@@ -70,14 +70,15 @@ function getCars()
                 end
             })
         end
+
         lib.registerContext({
-          id = 'biler',
-          title = 'Biler',
-          menu = 'main_menu',
-          onBack = function()
-          end,
-          options = carsStock,
-      })
+            id = 'biler',
+            title = 'Biler',
+            menu = 'main_menu',
+            onBack = function()
+            end,
+            options = carsStock,
+        })
 
       lib.showContext('biler')
 

@@ -117,10 +117,10 @@ end
 function getPlayers()
     local closestplayer = ESX.Game.GetClosestPlayer()
     local closePlayer = GetPlayerServerId(closestplayer)
+    local seller = GetPlayerServerId(PlayerId())
 
     ESX.TriggerServerCallback('th-bilforhandler:getNearestPlayers', function(players)
         local elements = {}
-
         for i=1, #players, 1 do
             if players[i].name ~= GetPlayerName(PlayerId()) then
                 local playerId = players[i].source
@@ -131,7 +131,7 @@ function getPlayers()
                     description = 'Tryk her for at sælge vedkommende en bil',
                     icon = 'user',
                     onSelect = function()
-                      sellMenu(playerId, firstName, lastName)
+                      chosseTheCar(playerId, firstName, lastName, seller)
                   end
                 })
             end
