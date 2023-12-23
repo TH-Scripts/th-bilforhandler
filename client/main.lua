@@ -11,11 +11,6 @@ Citizen.CreateThread(function()
 	ESX.PlayerData = ESX.GetPlayerData()
 end)
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-    checkBoss()
-end)
-
 isBoss = nil
 
 RegisterNetEvent('esx:setJob')
